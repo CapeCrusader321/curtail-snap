@@ -22,7 +22,7 @@ apps:
   curtail:
     command: usr/bin/curtail
     extensions: [gnome]
-    common-id: snap.community.curtail
+    common-id: snap.curtail.community
     environment:
             GTK_USE_PORTAL: 1
     plugs:
