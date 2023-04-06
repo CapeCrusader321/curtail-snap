@@ -43,12 +43,6 @@ parts:
   curtail:
     source: https://github.com/Huluti/Curtail.git
     plugin: meson
-    build-packages:
-      - curl
-      - build-essential
-      - make
-      - git
-     
     override-pull: |
       craftctl default
       craftctl set version=$(git describe --tags --abbrev=0)
