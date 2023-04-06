@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=Audacious-Gtk
+Name=Curtail-Snap
 GenericName=Music Player
 Comment=Listen to music
-Icon=${SNAP}/meta/gui/audacious.svg
+Icon=${SNAP}/meta/gui/curtail.svg
 Categories=AudioVideo;Audio;Player;
 Exec=audacious-snap %U
 TryExec=audacious-snap
