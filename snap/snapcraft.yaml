@@ -1,9 +1,9 @@
 name: curtail
 base: core22
 adopt-info: curtail
-summary: Curtail is an useful image compressor, supporting PNG, JPEG, WebP and SVG file types. 
+summary: Curtail is an useful image compressor.
 description: |
-  Curtail (previously ImCompressor) is an useful image compressor, supporting PNG, JPEG, WebP and SVG file types. It support both lossless and lossy compression modes with an option to whether keep or not metadata of images. It is inspired by Trimage and Image-Optimizer.
+  Curtail is an useful image compressor, supporting PNG, JPEG, WebP and SVG file types.
 grade: stable
 confinement: strict
 compression: lzo
