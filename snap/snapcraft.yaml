@@ -60,6 +60,7 @@ parts:
       - libwebp7
       - scour
       - jpegoptim
+      - python3.11
        
   oxipng:
     source: https://github.com/shssoichiro/oxipng.git
