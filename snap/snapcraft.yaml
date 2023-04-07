@@ -63,6 +63,10 @@ parts:
   oxipng:
     source: https://github.com/shssoichiro/oxipng.git
     plugin: rust
-  
+    build-packages:
+      - cargo
+      - build-essential
+      - gcc 
+      - make
     
   
