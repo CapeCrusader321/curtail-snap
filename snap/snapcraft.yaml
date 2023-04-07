@@ -20,7 +20,7 @@ slots:
 
 apps:
   curtail:
-    command: usr/bin/curtail
+    command: usr/local/bin/curtail
     extensions: [gnome]
     common-id: snap.curtail.community
     environment:
