@@ -20,7 +20,7 @@ slots:
 
 apps:
   curtail:
-    command: usr/local/bin/curtail
+    command: usr/bin/curtail
     extensions: [gnome]
     common-id: snap.curtail.community
     environment:
@@ -43,6 +43,8 @@ parts:
   curtail:
     source: https://github.com/Huluti/Curtail.git
     plugin: meson
+    meson-parameters:
+      - --prefix=/usr
     override-pull: |
       craftctl default
       craftctl set version=$(git describe --tags --abbrev=0)
