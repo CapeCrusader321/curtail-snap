@@ -45,7 +45,7 @@ parts:
     after: [oxipng]
     source: https://github.com/Huluti/Curtail.git
     plugin: meson
-    meson-parameters: meson-parameters: [--prefix=/snap/curtail/current/usr]
+    meson-parameters: [--prefix=/snap/curtail/current/usr]
     build-environment:
       # WORKAROUND: The python plugin is broken with gnome extension
       - PATH: ${CRAFT_PART_INSTALL}/bin:${PATH}
