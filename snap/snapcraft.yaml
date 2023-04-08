@@ -45,8 +45,11 @@ parts:
     after: [oxipng]
     source: https://github.com/Huluti/Curtail.git
     plugin: meson
-    meson-parameters:
-      - --prefix=/usr
+    meson-parameters: meson-parameters: [--prefix=/snap/curtail/current/usr]
+    build-environment:
+      # WORKAROUND: The python plugin is broken with gnome extension
+      - PATH: ${CRAFT_PART_INSTALL}/bin:${PATH}
+      - PYTHONPATH: ""  
     override-pull: |
       craftctl default
       craftctl set version=$(git describe --tags --abbrev=0)
@@ -61,7 +64,11 @@ parts:
       - scour
       - jpegoptim
       - python3.11
-       
+      
+    organize:
+      # WORKAROUND: Move files from fake installation location to actual target
+      snap/curtail/current/usr: usr
+    
   oxipng:
     source: https://github.com/shssoichiro/oxipng.git
     plugin: rust
