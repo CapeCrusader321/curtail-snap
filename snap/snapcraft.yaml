@@ -11,7 +11,7 @@ architectures:
     build-for: amd64
 
 plugs:
-  curtail-dbus:
+  curtail:
     interface: dbus
     bus: session
     name: io.github.CapeCrusader321.curtail
