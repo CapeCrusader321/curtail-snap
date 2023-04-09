@@ -48,7 +48,7 @@ parts:
     override-build: |
       craftctl default
       # WORKAROUND: Use python from search path, the path detected by meson doesn't exist when running the Snap
-      sed -e '1c#!/usr/bin/env python3' -i ${CRAFT_PART_INSTALL}/usr/bin/curtail
+      sed -e '1c#!/usr/bin/env python3' -i ${CRAFT_PART_INSTALL}/snap/curtail/current/usr/bin/curtail
     organize:
       snap/curtail/current/usr: usr
     parse-info: [usr/share/metainfo/com.github.huluti.Curtail.appdata.xml]
