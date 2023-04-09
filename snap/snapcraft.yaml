@@ -22,34 +22,25 @@ apps:
   curtail:
     command: usr/bin/curtail
     extensions: [gnome]
-    common-id: snap.curtail.community
     environment:
-            GTK_USE_PORTAL: 1
-            PYTHONPATH: ${SNAP}/lib/python3.10/site-packages:${SNAP}/usr/lib/python3/dist-packages
+            GTK_USE_PORTAL: '1'
+            
     plugs:
       - home
-      - network-status
       - network
-      - network-bind
       - raw-usb
-      - network-status
+      - optical-drive
       - removable-media
       - unity7
       - screen-inhibit-control
-      
- 
- 
       
 parts:
   curtail:
     after: [oxipng]
     source: https://github.com/Huluti/Curtail.git
     plugin: meson
-    meson-parameters: [--prefix=/snap/curtail/current/usr]
-    build-environment:
-      # WORKAROUND: The python plugin is broken with gnome extension
-      - PATH: ${CRAFT_PART_INSTALL}/bin:${PATH}
-      - PYTHONPATH: ""  
+    meson-parameters: 
+       - --prefix=/usr
     override-pull: |
       craftctl default
       craftctl set version=$(git describe --tags --abbrev=0)
@@ -63,12 +54,7 @@ parts:
       - libwebp7
       - scour
       - jpegoptim
-      - python3.11
       
-    organize:
-      # WORKAROUND: Move files from fake installation location to actual target
-      snap/curtail/current/usr: usr
-    
   oxipng:
     source: https://github.com/shssoichiro/oxipng.git
     plugin: rust
