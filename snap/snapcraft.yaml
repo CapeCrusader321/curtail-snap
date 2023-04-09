@@ -1,9 +1,7 @@
 name: curtail
 base: core22
 adopt-info: curtail
-summary: Curtail is an useful image compressor.
-description: |
-  Curtail is an useful image compressor, supporting PNG, JPEG, WebP and SVG file types.
+version: 1.7.0
 grade: stable
 confinement: strict
 compression: lzo
@@ -18,50 +16,50 @@ plugs:
     bus: session
     name: io.github.CapeCrusader321.curtail
 
+environment:
+  # WORKAROUND: Add python modules in Snap to search path
+  PYTHONPATH: ${SNAP}/lib/python3.10/site-packages:${SNAP}/usr/lib/python3/dist-packages
 apps:
   curtail:
     command: usr/bin/curtail
     extensions: [gnome]
-    environment:
-            GTK_USE_PORTAL: '1'        
     plugs:
       - home
-      - curtail-dbus
-      - network
-      - raw-usb
-      - optical-drive
       - removable-media
-      - unity7
-      - screen-inhibit-control
-      
 parts:
   curtail:
     after: [oxipng]
     source: https://github.com/Huluti/Curtail.git
+    source-tag: $SNAPCRAFT_PROJECT_VERSION
     plugin: meson
-    meson-parameters: 
-       - --prefix=/usr
-    override-pull: |
-      craftctl default
-      craftctl set version=$(git describe --tags --abbrev=0)
+    meson-parameters:
+      - --prefix=/usr
     build-packages:
-      - libgtk-4-dev
-      - libadwaita-1-dev
       - libwebp-dev
-      
     stage-packages:
       - pngquant
       - libwebp7
       - scour
       - jpegoptim
-      
+    override-build: |
+      craftctl default
+      # WORKAROUND: Use python from search path, the path detected by meson doesn't exist when running the Snap
+      sed -e '1c#!/usr/bin/env python3' -i ${CRAFT_PART_INSTALL}/usr/bin/curtail
+    parse-info: [usr/share/metainfo/com.github.huluti.Curtail.appdata.xml]
   oxipng:
     source: https://github.com/shssoichiro/oxipng.git
     plugin: rust
-    build-packages:
-      - cargo
-      - build-essential
-      - gcc 
-      - make
-    
-  
+  cleanup:
+    after:  # Make this part run last; list all your other parts here
+      - curtail
+      - oxipng
+    plugin: nil
+    build-snaps:  # List all content-snaps and base snaps you're using here
+      - core22
+      - gtk-common-themes
+      - gnome-42-2204
+    override-prime: |
+      set -eux
+      for snap in "core22" "gtk-common-themes" "gnome-42-2204"; do  # List all content-snaps and base snaps you're using here
+          cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+      done
