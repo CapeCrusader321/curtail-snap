@@ -5,7 +5,7 @@ version: 1.7.0
 grade: stable
 confinement: strict
 compression: lzo
-
+icon: snap/gui/curtail.svg
 architectures:
   - build-on: amd64
     build-for: amd64
@@ -34,7 +34,7 @@ parts:
     source-tag: $SNAPCRAFT_PROJECT_VERSION
     plugin: meson
     meson-parameters:
-      - --prefix=/usr
+      - --prefix=/snap/curtail/current/usr
     build-packages:
       - libwebp-dev
     stage-packages:
@@ -49,6 +49,8 @@ parts:
       craftctl default
       # WORKAROUND: Use python from search path, the path detected by meson doesn't exist when running the Snap
       sed -e '1c#!/usr/bin/env python3' -i ${CRAFT_PART_INSTALL}/usr/bin/curtail
+    organize:
+      snap/curtail/current/usr: usr
     parse-info: [usr/share/metainfo/com.github.huluti.Curtail.appdata.xml]
   oxipng:
     source: https://github.com/shssoichiro/oxipng.git
