@@ -53,6 +53,8 @@ parts:
   oxipng:
     source: https://github.com/shssoichiro/oxipng.git
     plugin: rust
+    build-packages:
+      - cargo
   cleanup:
     after:  # Make this part run last; list all your other parts here
       - curtail
