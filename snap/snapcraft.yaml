@@ -23,7 +23,7 @@ apps:
   curtail:
     command: usr/bin/curtail
     extensions: [gnome]
-    desktop: [usr/share/applications/com.github.huluti.Curtail.desktop]
+    desktop: usr/share/applications/com.github.huluti.Curtail.desktop
     plugs:
       - home
       - removable-media
