@@ -13,7 +13,7 @@ architectures:
     build-for: amd64
 
 slots:
-  curtail:
+  curtail-dbus:
     interface: dbus
     bus: session
     name: io.github.CapeCrusader321.curtail
@@ -23,10 +23,10 @@ apps:
     command: usr/bin/curtail
     extensions: [gnome]
     environment:
-            GTK_USE_PORTAL: '1'
-            
+            GTK_USE_PORTAL: '1'        
     plugs:
       - home
+      - curtail-dbus
       - network
       - raw-usb
       - optical-drive
