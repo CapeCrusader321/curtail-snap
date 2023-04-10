@@ -14,7 +14,7 @@ plugs:
   curtail:
     interface: dbus
     bus: session
-    name: io.github.CapeCrusader321.curtail
+    name: com.github.huluti.Curtail
 
 environment:
   # WORKAROUND: Add python modules in Snap to search path
@@ -30,26 +30,36 @@ apps:
       - removable-media
 parts:
   libadwaita:
-    after: [oxipng]
-    source: https://gitlab.gnome.org/GNOME/libadwaita.git
-    source-tag: '1.3.1'
     plugin: meson
-    meson-parameters:
-      - --prefix=/usr
-      - -Doptimization=3
-      - -Ddebug=true
-      - -Dintrospection=enabled
-      - -Dvapi=true
-      - -Dtests=false
-      - -Dexamples=false
-    build-packages:
-      - sassc
+    source: https://gitlab.gnome.org/GNOME/libadwaita/-/archive/1.3.1/libadwaita-1.3.1.tar.bz2
     override-pull: |
       craftctl default
+      # WORKAROUND: Ignore compiler warning
       sed -e 's/-W\(format-nonliteral\)\b/-Wno-\1/g' -i meson.build
+
     prime:
       - usr/lib/*/*adw*
       - usr/lib/*/*/Adw*
+
+    meson-parameters:
+      - --prefix=/usr
+      - -Dexamples=false
+      - -Dtests=false
+      - -Dintrospection=enabled
+      - -Dvapi=false
+    stage:
+      - -usr/include
+      
+    #meson-parameters:
+      #- --prefix=/usr
+      #- -Doptimization=3
+      #- -Ddebug=true
+      #- -Dintrospection=enabled
+      #- -Dvapi=true
+      #- -Dtests=false
+      #- -Dexamples=false
+   
+
   curtail:
     after: [oxipng, libadwaita]
     source: https://github.com/Huluti/Curtail.git
