@@ -10,7 +10,7 @@ architectures:
   - build-on: amd64
     build-for: amd64
 
-plugs:
+slots:
   curtail:
     interface: dbus
     bus: session
