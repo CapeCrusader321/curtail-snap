@@ -1,67 +1,96 @@
 name: curtail
 base: core22
 adopt-info: curtail
-summary: Curtail is an useful image compressor.
-description: |
-  Curtail is an useful image compressor, supporting PNG, JPEG, WebP and SVG file types.
+version: 1.7.0
 grade: stable
 confinement: strict
 compression: lzo
-
+icon: snap/gui/curtail.svg
 architectures:
   - build-on: amd64
     build-for: amd64
 
 plugs:
-  curtail-dbus:
+  curtail:
     interface: dbus
     bus: session
     name: io.github.CapeCrusader321.curtail
 
+environment:
+  # WORKAROUND: Add python modules in Snap to search path
+  PYTHONPATH: ${SNAP}/lib/python3.10/site-packages:${SNAP}/usr/lib/python3/dist-packages
 apps:
   curtail:
     command: usr/bin/curtail
     extensions: [gnome]
-    environment:
-            GTK_USE_PORTAL: '1'        
+    desktop: usr/share/applications/com.github.huluti.Curtail.desktop
     plugs:
       - home
-      - curtail-dbus
-      - network
-      - raw-usb
-      - optical-drive
       - removable-media
-      - unity7
-      - screen-inhibit-control
-      
 parts:
-  curtail:
+  libadwaita:
     after: [oxipng]
-    source: https://github.com/Huluti/Curtail.git
+    source: https://gitlab.gnome.org/GNOME/libadwaita.git
+    source-tag: '1.3.1'
     plugin: meson
-    meson-parameters: 
-       - --prefix=/usr
+    meson-parameters:
+      - --prefix=/usr
+      - -Doptimization=3
+      - -Ddebug=true
+      - -Dintrospection=enabled
+      - -Dvapi=true
+      - -Dtests=false
+      - -Dexamples=false
+    build-packages:
+      - sassc
     override-pull: |
       craftctl default
-      craftctl set version=$(git describe --tags --abbrev=0)
+      sed -e 's/-W\(format-nonliteral\)\b/-Wno-\1/g' -i meson.build
+    stage:
+      - -usr/include
+  curtail:
+    after: [oxipng, libadwaita]
+    source: https://github.com/Huluti/Curtail.git
+    source-tag: $SNAPCRAFT_PROJECT_VERSION
+    plugin: meson
+    meson-parameters:
+      - --prefix=/snap/curtail/current/usr
+    build-environment:
+      - PKG_CONFIG_PATH: $CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET/pkgconfig:/snap/gnome-42-2204-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET/pkgconfig:/snap/gnome-42-2204-sdk/current/usr/lib/pkgconfig:/snap/gnome-42-2204-sdk/current/usr/share/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}
     build-packages:
-      - libgtk-4-dev
-      - libadwaita-1-dev
       - libwebp-dev
-      
     stage-packages:
       - pngquant
       - libwebp7
       - scour
       - jpegoptim
-      
+    override-pull: |
+      craftctl default
+      sed -e 's|Icon=com.github.huluti.Curtail|Icon=${SNAP}/usr/share/icons/hicolor/scalable/apps/com.github.huluti.Curtail.svg|' -i data/com.github.huluti.Curtail.desktop.in
+    override-build: |
+      craftctl default
+      # WORKAROUND: Use python from search path, the path detected by meson doesn't exist when running the Snap
+      sed -e '1c#!/usr/bin/env python3' -i ${CRAFT_PART_INSTALL}/snap/curtail/current/usr/bin/curtail
+    organize:
+      snap/curtail/current/usr: usr
+    parse-info: [usr/share/metainfo/com.github.huluti.Curtail.appdata.xml]
   oxipng:
     source: https://github.com/shssoichiro/oxipng.git
     plugin: rust
     build-packages:
       - cargo
-      - build-essential
-      - gcc 
-      - make
-    
-  
+  cleanup:
+    after:  # Make this part run last; list all your other parts here
+      - curtail
+      - oxipng
+      - libadwaita
+    plugin: nil
+    build-snaps:  # List all content-snaps and base snaps you're using here
+      - core22
+      - gtk-common-themes
+      - gnome-42-2204
+    override-prime: |
+      set -eux
+      for snap in "core22" "gtk-common-themes" "gnome-42-2204"; do  # List all content-snaps and base snaps you're using here
+          cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+      done
