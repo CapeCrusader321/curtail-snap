@@ -18,7 +18,8 @@ plugs:
 
 environment:
   # WORKAROUND: Add python modules in Snap to search path
-  PYTHONPATH: ${SNAP}/lib/python3.10/site-packages:${SNAP}/usr/lib/python3/dist-packages
+  PYTHONPATH: ${SNAP}/usr/lib/python3/dist-packages:$PYTHONPATH
+
 apps:
   curtail:
     command: usr/bin/curtail
@@ -46,8 +47,9 @@ parts:
     override-pull: |
       craftctl default
       sed -e 's/-W\(format-nonliteral\)\b/-Wno-\1/g' -i meson.build
-    stage:
-      - -usr/include
+    prime:
+      - usr/lib/*/*adw*
+      - usr/lib/*/*/Adw*
   curtail:
     after: [oxipng, libadwaita]
     source: https://github.com/Huluti/Curtail.git
@@ -55,13 +57,8 @@ parts:
     plugin: meson
     meson-parameters:
       - --prefix=/snap/curtail/current/usr
-    build-environment:
-      - PKG_CONFIG_PATH: $CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET/pkgconfig:/snap/gnome-42-2204-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET/pkgconfig:/snap/gnome-42-2204-sdk/current/usr/lib/pkgconfig:/snap/gnome-42-2204-sdk/current/usr/share/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}
-    build-packages:
-      - libwebp-dev
     stage-packages:
       - pngquant
-      - libwebp7
       - scour
       - jpegoptim
     override-pull: |
@@ -79,18 +76,3 @@ parts:
     plugin: rust
     build-packages:
       - cargo
-  cleanup:
-    after:  # Make this part run last; list all your other parts here
-      - curtail
-      - oxipng
-      - libadwaita
-    plugin: nil
-    build-snaps:  # List all content-snaps and base snaps you're using here
-      - core22
-      - gtk-common-themes
-      - gnome-42-2204
-    override-prime: |
-      set -eux
-      for snap in "core22" "gtk-common-themes" "gnome-42-2204"; do  # List all content-snaps and base snaps you're using here
-          cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
-      done
