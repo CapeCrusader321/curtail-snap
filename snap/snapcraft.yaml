@@ -10,11 +10,13 @@ architectures:
   - build-on: amd64
     build-for: amd64
 
+
 slots:
   curtail:
     interface: dbus
     bus: session
     name: com.github.huluti.Curtail
+
 
 environment:
   # WORKAROUND: Add python modules in Snap to search path
