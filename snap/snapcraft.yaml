@@ -44,11 +44,6 @@ parts:
     stage:
       - -usr/include
       
-  #libadwaita:
-    #after: [oxipng]
-    #source: https://gitlab.gnome.org/GNOME/libadwaita.git
-    #source-tag: '1.3.1'
-    #plugin: meson
     #meson-parameters:
       #- --prefix=/usr
       #- -Doptimization=3
@@ -57,13 +52,7 @@ parts:
       #- -Dvapi=true
       #- -Dtests=false
       #- -Dexamples=false
-    #build-packages:
-      #- sassc
-    #override-pull: |
-      #craftctl default
-      #sed -e 's/-W\(format-nonliteral\)\b/-Wno-\1/g' -i meson.build
-    #stage:
-      #- -usr/include
+   
   curtail:
     after: [oxipng, libadwaita]
     source: https://github.com/Huluti/Curtail.git
