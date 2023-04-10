@@ -14,7 +14,7 @@ plugs:
   curtail:
     interface: dbus
     bus: session
-    name: io.github.CapeCrusader321.curtail
+    name: com.github.huluti.Curtail
 
 environment:
   # WORKAROUND: Add python modules in Snap to search path
