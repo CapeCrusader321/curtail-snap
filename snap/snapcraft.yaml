@@ -64,7 +64,6 @@ parts:
       - libwebp7
       - scour
       - jpegoptim
-      - pkg-config
     override-pull: |
       craftctl default
       sed -e 's|Icon=com.github.huluti.Curtail|Icon=${SNAP}/usr/share/icons/hicolor/scalable/apps/com.github.huluti.Curtail.svg|' -i data/com.github.huluti.Curtail.desktop.in
