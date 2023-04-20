@@ -1,7 +1,6 @@
 name: curtail
 base: core22
 adopt-info: curtail
-version: 1.7.0
 grade: stable
 confinement: strict
 compression: lzo
@@ -27,15 +26,14 @@ apps:
     command: usr/bin/curtail
     extensions: [gnome]
     common-id: com.github.huluti.Curtail
-    #environment:
-          #TMPDIR: $XDG_RUNTIME_DIR
+    environment:
+          TMPDIR: $XDG_RUNTIME_DIR
     desktop: usr/share/applications/com.github.huluti.Curtail.desktop
     
 parts:
   curtail:
     after: [oxipng]
     source: https://github.com/Huluti/Curtail.git
-    source-tag: $SNAPCRAFT_PROJECT_VERSION
     plugin: meson
     meson-parameters:
       - --prefix=/snap/curtail/current/usr
@@ -45,6 +43,7 @@ parts:
       - jpegoptim
     override-pull: |
       craftctl default
+      craftctl set version=$(git describe --tags --abbrev=0)
       sed -e 's|Icon=com.github.huluti.Curtail|Icon=${SNAP}/usr/share/icons/hicolor/scalable/apps/com.github.huluti.Curtail.svg|' -i data/com.github.huluti.Curtail.desktop.in
     override-build: |
       craftctl default
