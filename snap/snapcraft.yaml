@@ -4,7 +4,7 @@ adopt-info: curtail
 grade: stable
 confinement: strict
 compression: lzo
-icon: snap/gui/curtail.svg
+icon: usr/share/icons/hicolor/scalable/apps/com.github.huluti.Curtail.svg
 architectures:
   - build-on: amd64
     build-for: amd64
@@ -26,8 +26,6 @@ apps:
     command: usr/bin/curtail
     extensions: [gnome]
     common-id: com.github.huluti.Curtail
-    environment:
-          TMPDIR: $XDG_RUNTIME_DIR
     desktop: usr/share/applications/com.github.huluti.Curtail.desktop
     
 parts:
