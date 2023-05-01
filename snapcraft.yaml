@@ -24,8 +24,16 @@ apps:
   curtail:
     command: usr/bin/curtail
     extensions: [gnome]
+    plugs:
+      - home
+      - raw-usb
+      - network
+      - network-status
+      - optical-drive
+      - removable-media
     common-id: com.github.huluti.Curtail
     desktop: usr/share/applications/com.github.huluti.Curtail.desktop
+    
     
 parts:
   curtail:
