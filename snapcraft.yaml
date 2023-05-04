@@ -7,14 +7,12 @@ compression: lzo
 architectures:
   - build-on: amd64
     build-for: amd64
-
-
+    
 slots:
   curtail:
     interface: dbus
     bus: session
     name: com.github.huluti.Curtail
-
 
 environment:
   # WORKAROUND: Add python modules in Snap to search path
@@ -57,7 +55,6 @@ parts:
       sed -e '1c#!/usr/bin/env python3' -i ${CRAFT_PART_INSTALL}/snap/curtail/current/usr/bin/curtail
     organize:
       snap/curtail/current/usr: usr
-    
     
   oxipng:
     source: https://github.com/shssoichiro/oxipng.git
