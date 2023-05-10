@@ -46,6 +46,7 @@ parts:
       - pngquant
       - scour
       - jpegoptim
+      - libwebp
     override-pull: |
       craftctl default
       craftctl set version=$(git describe --tags --abbrev=0)
